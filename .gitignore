@@ -1,15 +1,69 @@
-# Node modules
+# =========================
+# Node.js
+# =========================
 node_modules/
-
-# Build files
-client/build/
-server/dist/
-server/build/
-
-# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
 
-# Environment variables
+# =========================
+# Build output
+# =========================
+dist/
+build/
+client/build/
+server/build/
+server/dist/
+
+# =========================
+# Environment files
+# =========================
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================
+# Logs
+# =========================
+*.log
+logs
+*.out
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# Editor & IDE
+# =========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Optional caches
+# =========================
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+out/
+coverage/
