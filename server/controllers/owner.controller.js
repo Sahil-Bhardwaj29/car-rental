@@ -111,7 +111,10 @@ export const deleteCar = async (req, res) => {
 export const getDashboardData = async (req, res) => {
   try {
     const {_id} = req.user;
-    
+    if(role!="owner"){
+      return res.json({success:false, message:"unauthorized" })
+    }
+    const cars = await Car.find({owner:_id})
   }catch (error) {
     console.log(error.message)
     res.json({success:false, message: error.message });
