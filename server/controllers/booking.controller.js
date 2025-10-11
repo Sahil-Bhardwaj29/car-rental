@@ -1,5 +1,5 @@
-import Booking from "../models/booking.model.js";
-import Car from "../models/car.model.js";
+import {Booking} from "../models/booking.model.js";
+import {Car} from "../models/car.model.js";
 //check availablity
 const checkAvailablity = async (car, pickupDate, returnDate) => {
   const bookings = await Booking.find({
