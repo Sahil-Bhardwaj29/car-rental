@@ -2,13 +2,38 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { dummyMyBookingsData } from '../../assets/assets';
 import Title from '../../components/owner/Title';
+import { useAppContext } from '../../context/AppContext';
+import toast from 'react-hot-toast';
 
 
 const ManageBookings = () => {
+  const {currency, axios} = useAppContext()
   const [bookings,setBookings] = useState([]);
-  const currency = import.meta.env.VITE_CURRENCY || "$";
+
   const fetchOwnerBookings = async () =>{
-    setBookings(dummyMyBookingsData)
+    try {
+      const {data} = await axios.get('/api/bookings/owner')
+      if(data.success){
+        setBookings(data.bookings)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  }
+  const changeBookingStatus = async (bookingId,status) =>{
+    try {
+      const {data} = await axios.post('/api/bookings/change-status',{bookingId,status})
+      if(data.success){
+        toast.success(data.message)
+        fetchOwnerBookings();
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   }
   useEffect(()=>{
     fetchOwnerBookings();
@@ -45,7 +70,7 @@ const ManageBookings = () => {
                 </td>
                 <td className='p-3'>
                   {booking.status === "pending"? (
-                    <select value={booking.status} className='border border-borderColor rounded-md px-3 py-2 outline-none focus:border-primary transition text-sm text-gray-500'>
+                    <select onChange={(e)=>changeBookingStatus(booking._id,e.target.value)} value={booking.status} className='border border-borderColor rounded-md px-3 py-2 outline-none focus:border-primary transition text-sm text-gray-500'>
                       <option value="pending">Pending</option>
                       <option value="cancelled">Cancelled</option>
                       <option value="confirmed">Confirmed</option>

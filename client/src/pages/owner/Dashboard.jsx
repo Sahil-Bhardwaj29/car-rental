@@ -13,6 +13,7 @@ const Dashboard = () => {
     pendingBookings:0,
     recentBookings:[],
     monthlyRevenue:0,
+    completedBookings:0,
   });
 
   const dashBoardCards = [

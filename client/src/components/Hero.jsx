@@ -1,14 +1,20 @@
 import React from 'react'
 import { useState } from 'react'
 import {assets, cityList} from '../assets/assets.js'
+import { useAppContext } from '../context/AppContext.jsx'
 const Hero = () => {
+  const {pickupDate,setPickupDate, returnDate, setReturnDate,navigate} = useAppContext()
   const [pickupLocation, setPickupLocation] =useState('');
+  const handleSearch = (e) =>{
+    e.preventDefault();
+    navigate('/cars?pickupLocation='+pickupLocation+'&pickupDate='+pickupDate+'&returnDate='+returnDate)
+  }
   return (
     <div className='h-screen flex flex-col justify-center items-center bg-light text-center gap-14'>
       <h1 className='text-4xl font-semibold md:text-5xl'>
         Luxuray cars on Rent
       </h1>
-      <form className='flex flex-col md:flex-row  items-start justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] gap-4 md:gap-6'>
+      <form onSubmit={handleSearch} className='flex flex-col md:flex-row  items-start justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] gap-4 md:gap-6'>
         <div className='flex flex-col gap-10 md:flex-row items-start md:items-center min-md:ml-8'>
           <div className='flex flex-col gap-2 items-start'>
             <select required 
@@ -22,11 +28,11 @@ const Hero = () => {
           </div>
           <div className='flex flex-col gap-2 items-start'>
             <label htmlFor="pickup-date">Pick-up Date</label>
-            <input type="date" id='pickup-date' className='text-sm text-gray-500' required min={new Date().toISOString().split('T')[0]} />
+            <input value={pickupDate} onChange={e=>setPickupDate(e.target.value)} type="date" id='pickup-date' className='text-sm text-gray-500' required min={new Date().toISOString().split('T')[0]} />
           </div>
           <div className='flex flex-col gap-2 items-start'>
             <label htmlFor="return-date">Return Date</label>
-            <input type="date" id='return-date' className='text-sm text-gray-500' required min={new Date().toISOString().split('T')[0]} />
+            <input value={returnDate} onChange={e=>setReturnDate(e.target.value)} type="date" id='return-date' className='text-sm text-gray-500' required min={new Date().toISOString().split('T')[0]} />
           </div>
         </div>
 

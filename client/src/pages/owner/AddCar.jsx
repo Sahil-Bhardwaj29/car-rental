@@ -30,13 +30,13 @@ const AddCar = () => {
     try{
       const formData = new FormData();
       formData.append('image',image)
-      formData.append('carData',JSON.stringify(car))
+      formData.append('carData',JSON.stringify(carData))
 
       const {data} = await axios.post('/api/owner/add-car',formData)
       if(data.success){
         toast.success(data.message)
         setImage(null)
-        setCar({
+        setCarData({
           brand:"",
           model:"", 
           year:0,
@@ -149,7 +149,7 @@ const AddCar = () => {
         </div>
         <button className='bg-primary text-white px-4 py-2 rounded-md w-max mt-4 font-medium cursor-pointer hover:bg-primaryDark transition flex items-center gap-2' type='submit'>
           <img src={assets.tick_icon} alt="" />
-          List Your Car
+          {isLoading?'Listing...':'List Your Car'}
         </button>
       </form>
     </div>

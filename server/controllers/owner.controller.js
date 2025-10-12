@@ -76,14 +76,23 @@ export const toggleCarAvailability = async (req, res) => {
     const {_id} = req.user;
     const {carId} = req.body;
 
+    if (!carId) {
+      return res.status(400).json({ success: false, message: "Car ID is required" });
+    }
+
     const car = await Car.findById(carId);
+    if (!car) {
+      return res.status(404).json({ success: false, message: "Car not found" });
+    }
+
     //check if the car belongs to the owner
-    if(car.owner.toString() !== _id){
+    const ownerId = car.owner._id ? car.owner._id.toString() : car.owner.toString();
+    if(ownerId !== _id.toString()){
       return res.status(403).json({success:false,message:"You are not authorized to update this car"});
     }
     car.isAvailable = !car.isAvailable;
     await car.save();
-    return res.status(200).json({success:true,message:"Car availability updated successfully"});
+    return res.status(200).json({success:true,message:"Car availability updated successfully",car});
   }catch (error) {
     console.log(error.message)
     return res.status(500).json({success:false, message: error.message });
@@ -117,8 +126,8 @@ export const getDashboardData = async (req, res) => {
     }
     const cars = await Car.find({owner:_id})
     const bookings = await Booking.find({owner:_id}).populate("car").sort({createdAt:-1}).lean();
-    const pendingBooking = await Booking.find({owner:_id,status:"pending"})
-    const completedBooking = await Booking.find({owner:_id,status:"confirmed"})
+    const pendingBookings = await Booking.find({owner:_id,status:"pending"})
+    const completedBookings = await Booking.find({owner:_id,status:"confirmed"})
 
     //calculate monthly revenue
     const monthlyRevenue = bookings.slice().filter(booking => booking.status === "confirmed").reduce((acc, booking)=>acc + booking.price,0)
@@ -126,11 +135,12 @@ export const getDashboardData = async (req, res) => {
     const dashboardData = {
       totalCars: cars.length,
       totalBookings: bookings.length,
-      pendingBookings: pendingBooking.length,
-      completedBooking: completedBooking.length,
+      pendingBookings: pendingBookings.length,
+      completedBookings: completedBookings.length, 
       recentBookings: bookings.slice(0,3),
       monthlyRevenue
     }
+
 
     return res.status(200).json({ success: true, dashboardData });
   }catch (error) {

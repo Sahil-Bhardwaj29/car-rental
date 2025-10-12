@@ -104,13 +104,20 @@ export const changeBookingStatus = async (req, res) => {
   try{
     const {_id} = req.user;
     const {bookingId, status} = req.body;
+    
+    if(!bookingId || !status){
+      return res.status(400).json({ success: false, message: "Booking ID and status are required" });
+    }
+
     const booking = await Booking.findById(bookingId);
     if(!booking){
       return res.status(404).json({ success: false, message: "Booking not found" });
     }
-    if(booking.owner.toString() !== _id.toString()){
+    const ownerId = booking.owner._id ? booking.owner._id.toString() : booking.owner.toString();
+    if(ownerId !== _id.toString()){
       return res.status(403).json({ success: false, message: "Access denied" });
     }
+
     booking.status = status;
     await booking.save();
     return res.status(200).json({ success: true, message: "Booking status updated successfully" });
