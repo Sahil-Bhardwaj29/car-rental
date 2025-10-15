@@ -12,7 +12,7 @@ const Hero = () => {
   return (
     <div className='h-screen flex flex-col justify-center items-center bg-light text-center gap-14'>
       <h1 className='text-4xl font-semibold md:text-5xl'>
-        Luxuray cars on Rent
+        Luxury cars on Rent
       </h1>
       <form onSubmit={handleSearch} className='flex flex-col md:flex-row  items-start justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.1)] gap-4 md:gap-6'>
         <div className='flex flex-col gap-10 md:flex-row items-start md:items-center min-md:ml-8'>
