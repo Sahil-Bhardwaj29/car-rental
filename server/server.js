@@ -8,7 +8,19 @@ import bookingRouter from './routes/booking.routes.js';
 
 const app = express();
 
-await connectDB();
+// Initialize database connection with singleton pattern
+let dbConnected = false;
+const initializeDB = async () => {
+  if (!dbConnected) {
+    await connectDB();
+    dbConnected = true;
+  }
+};
+
+// Connect to DB on startup (non-blocking)
+initializeDB().catch(err => {
+  console.error('Failed to connect to database:', err.message);
+});
 
 app.use(cors());
 app.use(express.json());
